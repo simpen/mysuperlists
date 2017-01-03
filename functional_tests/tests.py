@@ -10,7 +10,7 @@ from selenium.webdriver.common.keys import Keys
 class NewVisitorTest(LiveServerTestCase):
 
     def setUp(self):
-        self.browser = webdriver.Firefox()
+        self.browser = webdriver.Chrome()
         self.browser.implicitly_wait(1)
 
     def tearDown(self):
@@ -42,7 +42,7 @@ class NewVisitorTest(LiveServerTestCase):
         # 她按回车键后，被带到了一个新 URL
         # 这个页面的待办事项清单中显示了"1: Buy peacock feathers"
         inputbox.send_keys(Keys.ENTER)
-        time.sleep(0.5)
+        time.sleep(1)
 
         edith_list_url = self.browser.current_url
         self.assertRegex(edith_list_url, '/lists/.+')
@@ -66,7 +66,7 @@ class NewVisitorTest(LiveServerTestCase):
         # 我们使用一个新浏览器会话
         # 确保伊迪丝的信息不会从 cookie 中泄露出来
         self.browser.quit()
-        self.browser = webdriver.Firefox()
+        self.browser = webdriver.Chrome()
 
         # 莱恩访问首页
         # 页面中看不到伊迪丝的清单
@@ -95,7 +95,6 @@ class NewVisitorTest(LiveServerTestCase):
         # 两个从都很满意，去睡觉了
 
         # 伊迪丝想知道这个网站是否会记住她的清单
-        self.fail(msg='Finish the test!')
         # 她看到网站为她生成了一个唯一的网址
 
         # 而且页面中有一些文字解说这个功能
@@ -103,3 +102,19 @@ class NewVisitorTest(LiveServerTestCase):
         # 她访问那个 URL，发现她的待办事项列表还在
 
         # 她很满意，去睡觉了
+
+    def test_layout_and_styling(self):
+        # 伊迪丝访问首页
+        self.browser.get(self.live_server_url)
+        self.browser.set_window_size(1024, 768)
+        print(self.browser.get_window_size(), ...)
+        # 她看到输入框完美地居中显示
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertAlmostEqual(
+            inputbox.location['x'] + inputbox.size['width'] / 2, 512, delta=5)
+
+        # 她新建了一个清单，看到输入框仍完美地居中显示
+        inputbox.send_keys('testing\n')
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertAlmostEqual(
+            inputbox.location['x'] + inputbox.size['width'] / 2, 512, delta=5)
