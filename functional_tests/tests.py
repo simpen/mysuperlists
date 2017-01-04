@@ -1,13 +1,13 @@
 import unittest
 import time
 
-from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
 
-class NewVisitorTest(LiveServerTestCase):
+class NewVisitorTest(StaticLiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Chrome()
@@ -42,7 +42,7 @@ class NewVisitorTest(LiveServerTestCase):
         # 她按回车键后，被带到了一个新 URL
         # 这个页面的待办事项清单中显示了"1: Buy peacock feathers"
         inputbox.send_keys(Keys.ENTER)
-        time.sleep(1)
+        # time.sleep(1)
 
         edith_list_url = self.browser.current_url
         self.assertRegex(edith_list_url, '/lists/.+')
@@ -54,7 +54,7 @@ class NewVisitorTest(LiveServerTestCase):
         inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Use peacock feathers to make a fly')
         inputbox.send_keys(Keys.ENTER)
-        time.sleep(0.5)
+        # time.sleep(0.5)
 
         # 页面再次更新，她的清单是显示了这两个待办事项
         self.check_for_row_in_list_table(
@@ -80,7 +80,7 @@ class NewVisitorTest(LiveServerTestCase):
         inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Buy milk')
         inputbox.send_keys(Keys.ENTER)
-        time.sleep(0.5)
+        # time.sleep(0.5)
 
         # 莱恩获得了他的唯一 URL
         rayn_list_url = self.browser.current_url
@@ -106,8 +106,8 @@ class NewVisitorTest(LiveServerTestCase):
     def test_layout_and_styling(self):
         # 伊迪丝访问首页
         self.browser.get(self.live_server_url)
-        # self.browser.set_window_size(1024, 768)
-        print(self.browser.get_window_size(), ...)
+        self.browser.set_window_size(1024, 768)
+        # print(self.browser.get_window_size(), ...)
         # 她看到输入框完美地居中显示
         inputbox = self.browser.find_element_by_id('id_new_item')
         # time.sleep(100)
